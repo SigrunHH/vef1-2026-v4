@@ -130,7 +130,7 @@ Verkefni sett fyrir í fyrirlestri mánudaginn 5. október 2026.
 
 ## Skil
 
-Skila skal í Canvas, seinasta lagi fyrir lok dags fimmtudaginn 22. október 2026.
+Skila skal í Canvas, seinasta lagi fyrir lok dags fimmtudaginn 29. október 2026.
 
 Skilaboð skulu innihalda bæði:
 
