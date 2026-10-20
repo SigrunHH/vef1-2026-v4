@@ -28,6 +28,25 @@ const state = {
  */
 function start() {
   /* TODO velja spurningar, endursetja stöðu, sýna fyrsta skjá */
+  const startButton = document.querySelector('.start-button');
+
+  if(startButton){
+  console.log('startButton', startButton.textContent)
+
+  startButton.addEventListener('click', () => {
+    /* console.log('click') */
+    const startSection = document.querySelector('section.start');
+       const startsSectionClass = startSection.getAttribute('class')
+       startSection.setAttribute('class', startsSectionClass + ' hidden')
+    
+    const questionSection = document.querySelector('section.question');
+    questionSection.classList.remove('hidden')
+       console.log('start section', startSection, startsSectionClass);
+    
+  })
+  }else{
+    console.error('fann ekki start button')
+  }
 }
 
 /**
@@ -56,8 +75,30 @@ function restart() {
   /* TODO sýna upphafsskjá og stöðu */
 }
 
-function initialize() {
+function initialize(a) {
   /* TODO finna öll element, tengja form, sýna upphafsstöðu og upphafsskjá */
+  const result = isCorrect('test', 'Test');
+
+  console.log('result er', result);
+
+  const shuffled = shuffle(questions);
+
+  console.log('stokkaðar spurningar', shuffled);
+
+  start();
+
+  const form = document.querySelector('form.answer-form');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('form submitted')
+
+    const data = new FormData(form);
+    const answer = data.get('answer');
+    console.log('Svarið er', answer)
+
+  })
+
 }
 
-initialize();
+initialize('test');

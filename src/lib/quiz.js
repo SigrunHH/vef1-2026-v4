@@ -28,7 +28,11 @@
  * @returns {T[]} Nýtt, stokkað fylki
  */
 export function shuffle(array) {
-  /* TODO útfæra */
+  for (let i = array.length - 1; i >= 1; i--) {
+    const j = Math.floor(Math.random() * (i +1));
+    [array [i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
 /**
@@ -49,8 +53,27 @@ export function pickQuestions(questions, count) {
  * @returns {boolean} `true` ef svar er rétt
  */
 export function isCorrect(answer, correctAnswer) {
-  /* TODO útfæra */
+  if(typeof answer!= 'string'){
+    return false;
+  }
+
+  if (typeof correctAnswer !== 'string'){
+    return false;
+  }
+
+  const answerNormalized = answer.trim().toLocaleLowerCase();
+  const correctAnswerNormalized = correctAnswer.trim().toLocaleLowerCase;
+
+  return answerNormalized == correctAnswerNormalized;
 }
+console.assert(isCorrect('test', 'test'), 'sami strengur er true');
+console.assert(isCorrect(' test', 'test'), 'hunsar bil fyrir framan');
+console.assert(isCorrect(' test', 'test '), 'hunsar bil fyrir framan og aftan á báðum strengjum');
+console.assert(isCorrect('.', '.\n'), 'hunsar newline');
+console.assert(isCorrect('æ','Æ'), 'há og lástafir skipta ekki máli');
+console.assert(isCorrect('GRÁTUR', 'grátur'), 'styður emoji');
+console.assert(isCorrect('1', 1), 'verður að vera strengur');
+console.assert(isCorrect('',''), 'má ekki vera tómistrengur í réttu svari');
 
 /**
  * Býr til niðurstöður út frá spurningum og svörum notanda, í sömu röð.
@@ -80,3 +103,4 @@ export function countCorrect(results) {
 export function updateStats(stats, results) {
   /* TODO útfæra */
 }
+
