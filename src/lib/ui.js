@@ -1,4 +1,5 @@
 import { el, empty, setText } from './elements.js';
+import { questions } from './questions.js';
 
 /**
  * @typedef {"start" | "question" | "results"} Screen
@@ -16,7 +17,16 @@ const SCREENS = ['start', 'question', 'results'];
  * @returns {void}
  */
 export function showScreen(name) {
-  /* TODO útfæra */
+ for(screen of SCREENS){
+  const section = document.querySelector(`section.${screen}`);
+  section.classList.add('hidden');
+ }
+
+ const targetScreen = document.querySelector(`section.${name}`);
+
+ if(targetScreen){
+  targetScreen.classList.remove('hidden')
+ }
 }
 
 /**
@@ -25,8 +35,17 @@ export function showScreen(name) {
  * @returns {void}
  */
 export function renderStats(stats) {
-  /* TODO útfæra */
-}
+  console.log(question, num, total);
+  const categoryElement = document.querySelector('.title .category');
+  categoryElement.textContent  = question.category;
+
+  const questionElement = document.querySelector('.title .question-text');
+
+  if(questionElement){
+  questionElement.textContent = question.question;
+  }else{
+    console.error("fann ekki question element");
+}}
 
 /**
  * Birtir spurningu, tæmir svarreit og setur fókus á hann.

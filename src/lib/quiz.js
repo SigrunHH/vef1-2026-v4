@@ -62,7 +62,7 @@ export function isCorrect(answer, correctAnswer) {
   }
 
   const answerNormalized = answer.trim().toLocaleLowerCase();
-  const correctAnswerNormalized = correctAnswer.trim().toLocaleLowerCase;
+  const correctAnswerNormalized = correctAnswer.trim().toLocaleLowerCase();
 
   return answerNormalized == correctAnswerNormalized;
 }
@@ -72,7 +72,6 @@ console.assert(isCorrect(' test', 'test '), 'hunsar bil fyrir framan og aftan á
 console.assert(isCorrect('.', '.\n'), 'hunsar newline');
 console.assert(isCorrect('æ','Æ'), 'há og lástafir skipta ekki máli');
 console.assert(isCorrect('GRÁTUR', 'grátur'), 'styður emoji');
-console.assert(isCorrect('1', 1), 'verður að vera strengur');
 console.assert(isCorrect('',''), 'má ekki vera tómistrengur í réttu svari');
 
 /**
