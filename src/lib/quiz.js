@@ -29,8 +29,8 @@
  */
 export function shuffle(array) {
   for (let i = array.length - 1; i >= 1; i--) {
-    const j = Math.floor(Math.random() * (i +1));
-    [array [i], array[j]] = [array[j], array[i]];
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
@@ -54,15 +54,15 @@ export function pickQuestions(questions, count) {
  * @returns {boolean} `true` ef svar er rétt
  */
 export function isCorrect(answer, correctAnswer) {
-  if(typeof answer !== "string"){
+  if (typeof answer !== "string") {
     return false;
   }
 
-  if (typeof correctAnswer !== "string"){
+  if (typeof correctAnswer !== "string") {
     return false;
   }
 
-  if(correctAnswer === ""){
+  if (correctAnswer === "") {
     return false;
   }
 
@@ -71,13 +71,16 @@ export function isCorrect(answer, correctAnswer) {
 
   return answerNormalized === correctAnswerNormalized;
 }
-console.assert(isCorrect('test', 'test'), 'sami strengur er true');
-console.assert(isCorrect(' test', 'test'), 'hunsar bil fyrir framan');
-console.assert(isCorrect(' test', 'test '), 'hunsar bil fyrir framan og aftan á báðum strengjum');
-console.assert(isCorrect('.', '.\n'), 'hunsar newline');
-console.assert(isCorrect('æ','Æ'), 'há og lástafir skipta ekki máli');
-console.assert(isCorrect('😭GRÁTUR', '😭grátur'), 'styður emoji');
-console.assert(isCorrect('',''), 'má ekki vera tómistrengur í réttu svari');
+console.assert(isCorrect("test", "test"), "sami strengur er true");
+console.assert(isCorrect(" test", "test"), "hunsar bil fyrir framan");
+console.assert(
+  isCorrect(" test", "test "),
+  "hunsar bil fyrir framan og aftan á báðum strengjum",
+);
+console.assert(isCorrect(".", ".\n"), "hunsar newline");
+console.assert(isCorrect("æ", "Æ"), "há og lástafir skipta ekki máli");
+console.assert(isCorrect("😭GRÁTUR", "😭grátur"), "styður emoji");
+console.assert(isCorrect("", ""), "má ekki vera tómistrengur í réttu svari");
 
 /**
  * Býr til niðurstöður út frá spurningum og svörum notanda, í sömu röð.
@@ -105,7 +108,7 @@ export function createResults(questions, answers) {
  * @returns {number} Fjöldi réttra svara
  */
 export function countCorrect(results) {
- return results.filter((result) => result.correct).length;
+  return results.filter((result) => result.correct).length;
 }
 
 /**
@@ -123,4 +126,3 @@ export function updateStats(stats, results) {
     incorrect: stats.incorrect + (results.length - correct),
   };
 }
-

@@ -1,6 +1,17 @@
 import { questions } from "./lib/questions.js";
-import { countCorrect,  createResults, isCorrect, shuffle, updateStats} from "./lib/quiz.js";
-import { renderQuestion, renderResults, renderStats, showScreen } from "./lib/ui.js";
+import {
+  countCorrect,
+  createResults,
+  isCorrect,
+  shuffle,
+  updateStats,
+} from "./lib/quiz.js";
+import {
+  renderQuestion,
+  renderResults,
+  renderStats,
+  showScreen,
+} from "./lib/ui.js";
 
 /** Fasti sem segir til um hversu margar spurningar við sýnum. */
 const NUMBER_OF_QUESTIONS = 4;
@@ -27,19 +38,19 @@ const state = {
  * @returns {void}
  */
 function start() {
-    const shuffled = shuffle(questions);
-    state.questions = shuffled.slice(0, NUMBER_OF_QUESTIONS);
-    state.current = 0;
-    state.answers = [];
+  const shuffled = shuffle(questions);
+  state.questions = shuffled.slice(0, NUMBER_OF_QUESTIONS);
+  state.current = 0;
+  state.answers = [];
 
-showScreen("question");
+  showScreen("question");
 
-      renderQuestion(
-        state.questions[state.current],
-        state.current + 1,
-        NUMBER_OF_QUESTIONS,
-      );
-      }
+  renderQuestion(
+    state.questions[state.current],
+    state.current + 1,
+    NUMBER_OF_QUESTIONS,
+  );
+}
 
 /**
  * Klárar leik, uppfærir tölfræði og sýnir niðurstöður.
@@ -65,19 +76,19 @@ function submitAnswer(answer) {
     state.questions[state.current].answer,
   );
 
-  if (correctAnswer){
+  if (correctAnswer) {
     alert("Rétt!");
   } else {
     alert("Ekki rétt");
   }
 
-  state.answers.push(answer); 
+  state.answers.push(answer);
 
   const nextQuestionNum = state.current + 1;
 
-  if(nextQuestionNum >= NUMBER_OF_QUESTIONS){
+  if (nextQuestionNum >= NUMBER_OF_QUESTIONS) {
     finish();
-  }else{
+  } else {
     state.current = nextQuestionNum;
     renderQuestion(
       state.questions[state.current],
@@ -92,34 +103,34 @@ function submitAnswer(answer) {
  * @returns {void}
  */
 function restart() {
- renderStats(state.stats);
- showScreen("start");
+  renderStats(state.stats);
+  showScreen("start");
 }
 
 function initialize() {
   const startButton = document.querySelector(".start-button");
 
-  if(startButton){
+  if (startButton) {
     startButton.addEventListener("click", start);
   } else {
     console.error("fann ekki start button");
   }
-  
+
   const form = document.querySelector("form");
 
-  if(!form){
+  if (!form) {
     console.error("form not found");
     return;
   }
 
   form.addEventListener("submit", (e) => {
-     e.preventDefault();
+    e.preventDefault();
 
     const data = new FormData(form);
     const answer = data.get("answer");
 
-    if(typeof answer !== "string"){
-      console.warn("answer is not a string")
+    if (typeof answer !== "string") {
+      console.warn("answer is not a string");
       return;
     }
 
@@ -127,14 +138,14 @@ function initialize() {
     const input = form.querySelector("input");
     form.reset();
 
-    if (input){
-    input.focus();
+    if (input) {
+      input.focus();
     }
   });
 
   const restartButton = document.querySelector("button.restart-button");
-  
-  if(restartButton) {
+
+  if (restartButton) {
     restartButton.addEventListener("click", restart);
   }
 

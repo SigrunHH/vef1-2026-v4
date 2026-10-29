@@ -1,5 +1,5 @@
-import { el, empty, setText } from './elements.js';
-import { questions } from './questions.js';
+import { el, empty, setText } from "./elements.js";
+import { questions } from "./questions.js";
 
 /**
  * @typedef {"start" | "question" | "results"} Screen
@@ -17,22 +17,22 @@ const SCREENS = ["start", "question", "results"];
  * @returns {void}
  */
 export function showScreen(name) {
- for(const screen of SCREENS){
-  const section = document.querySelector(`section.${screen}`);
+  for (const screen of SCREENS) {
+    const section = document.querySelector(`section.${screen}`);
 
-  if(!section){
-    console.warn("section is null");
-    continue;
+    if (!section) {
+      console.warn("section is null");
+      continue;
+    }
+
+    section.classList.add("hidden");
   }
 
-  section.classList.add("hidden");
- }
+  const targetScreen = document.querySelector(`section.${name}`);
 
- const targetScreen = document.querySelector(`section.${name}`);
-
- if(targetScreen){
-  targetScreen.classList.remove("hidden");
- }
+  if (targetScreen) {
+    targetScreen.classList.remove("hidden");
+  }
 }
 
 /**
@@ -41,12 +41,12 @@ export function showScreen(name) {
  * @returns {void}
  */
 
-function getOrCreate(screen, className, tag){
+function getOrCreate(screen, className, tag) {
   const section = document.querySelector(`section.${screen}`);
 
   let element = section.querySelector(`.${className}`);
 
-  if(!element) {
+  if (!element) {
     element = el(tag, { class: className });
     section.appendChild(element);
   }
@@ -62,7 +62,7 @@ export function renderStats(stats) {
     el("p", {}, `Fjöldi réttra svara: ${stats.correct}`),
     el("p", {}, `Fjöldi rangra svara: ${stats.incorrect}`),
   );
-  }
+}
 
 /**
  * Birtir spurningu, tæmir svarreit og setur fókus á hann.
@@ -72,34 +72,32 @@ export function renderStats(stats) {
  * @returns {void}
  */
 
-
 export function renderQuestion(question, num, total) {
   setText(".progress .current", String(num));
   setText(".progress .total", String(total));
 
   const categoryElement = document.querySelector(".title .category");
-  
-  if(!categoryElement){
-    console.warn("category element not found");  
+
+  if (!categoryElement) {
+    console.warn("category element not found");
     return;
   }
-  
-  categoryElement.textContent  = question.category;
+
+  categoryElement.textContent = question.category;
 
   const questionElement = document.querySelector(".title .question-text");
 
-  if(questionElement){
-  questionElement.textContent = question.question;
-  }else{
+  if (questionElement) {
+    questionElement.textContent = question.question;
+  } else {
     console.error("fann ekki question element");
-}
+  }
 
+  const input = document.querySelector("form input");
 
-const input = document.querySelector("form input");
-
-if (input) {
-  input.focus;
-}
+  if (input) {
+    input.focus;
+  }
 }
 
 /**
@@ -122,7 +120,7 @@ export function renderResults(results, correctCount) {
     list.appendChild(
       el(
         "li",
-        {class: result.correct ? "result correct" : "result incorrect"},
+        { class: result.correct ? "result correct" : "result incorrect" },
 
         el("h3", {}, `${i + 1}, ${result.category}`),
         el("p", {}, result.question),
