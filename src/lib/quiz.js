@@ -42,7 +42,8 @@ export function shuffle(array) {
  * @returns {Question[]} Valdar spurningar
  */
 export function pickQuestions(questions, count) {
-  /* TODO útfæra */
+  const shuffled = shuffle([...questions]);
+  return shuffled.slice(0, count);
 }
 
 /**
@@ -53,25 +54,29 @@ export function pickQuestions(questions, count) {
  * @returns {boolean} `true` ef svar er rétt
  */
 export function isCorrect(answer, correctAnswer) {
-  if(typeof answer!= 'string'){
+  if(typeof answer !== "string"){
     return false;
   }
 
-  if (typeof correctAnswer !== 'string'){
+  if (typeof correctAnswer !== "string"){
+    return false;
+  }
+
+  if(correctAnswer === ""){
     return false;
   }
 
   const answerNormalized = answer.trim().toLocaleLowerCase();
   const correctAnswerNormalized = correctAnswer.trim().toLocaleLowerCase();
 
-  return answerNormalized == correctAnswerNormalized;
+  return answerNormalized === correctAnswerNormalized;
 }
 console.assert(isCorrect('test', 'test'), 'sami strengur er true');
 console.assert(isCorrect(' test', 'test'), 'hunsar bil fyrir framan');
 console.assert(isCorrect(' test', 'test '), 'hunsar bil fyrir framan og aftan á báðum strengjum');
 console.assert(isCorrect('.', '.\n'), 'hunsar newline');
 console.assert(isCorrect('æ','Æ'), 'há og lástafir skipta ekki máli');
-console.assert(isCorrect('GRÁTUR', 'grátur'), 'styður emoji');
+console.assert(isCorrect('😭GRÁTUR', '😭grátur'), 'styður emoji');
 console.assert(isCorrect('',''), 'má ekki vera tómistrengur í réttu svari');
 
 /**
@@ -81,7 +86,17 @@ console.assert(isCorrect('',''), 'má ekki vera tómistrengur í réttu svari');
  * @returns {Result[]} Niðurstöður
  */
 export function createResults(questions, answers) {
-  /* TODO útfæra */
+  return questions.map((q, i) => {
+    const answer = answers[i] ?? "";
+
+    return {
+      category: q.category,
+      question: q.question,
+      answer,
+      correctAnswer: q.answer,
+      correct: isCorrect(answer, q.answer),
+    };
+  });
 }
 
 /**
@@ -90,7 +105,7 @@ export function createResults(questions, answers) {
  * @returns {number} Fjöldi réttra svara
  */
 export function countCorrect(results) {
-  /* TODO útfæra */
+ return results.filter((result) => result.correct).length;
 }
 
 /**
@@ -100,6 +115,12 @@ export function countCorrect(results) {
  * @returns {Stats} Ný tölfræði
  */
 export function updateStats(stats, results) {
-  /* TODO útfæra */
+  const correct = countCorrect(results);
+
+  return {
+    played: stats.played + 1,
+    correct: stats.correct + correct,
+    incorrect: stats.incorrect + (results.length - correct),
+  };
 }
 

@@ -1,8 +1,6 @@
 import { questions } from "./lib/questions.js";
-import { isCorrect, shuffle } from "./lib/quiz.js";
-import { renderQuestion, showScreen } from "./lib/ui.js";
-
-/* TODO importa úr hinum skránum */
+import { countCorrect,  createResults, isCorrect, shuffle, updateStats} from "./lib/quiz.js";
+import { renderQuestion, renderResults, renderStats, showScreen } from "./lib/ui.js";
 
 /** Fasti sem segir til um hversu margar spurningar við sýnum. */
 const NUMBER_OF_QUESTIONS = 4;
@@ -29,93 +27,119 @@ const state = {
  * @returns {void}
  */
 function start() {
-  
-  /* TODO velja spurningar, endursetja stöðu, sýna fyrsta skjá */
     const shuffled = shuffle(questions);
-    state.questions = shuffled.slice(0,NUMBER_OF_QUESTIONS - 1);
-    state.current = 1;
+    state.questions = shuffled.slice(0, NUMBER_OF_QUESTIONS);
+    state.current = 0;
     state.answers = [];
-  
-  const startButton = document.querySelector(".start-button");
 
-  if (startButton) {
-    startButton.addEventListener("click", (e) => {
-      showScreen("question");
+showScreen("question");
 
       renderQuestion(
-        state.questions[state.current-1],
-        state.current -1,
+        state.questions[state.current],
+        state.current + 1,
         NUMBER_OF_QUESTIONS,
       );
-
-      });
-  } else {
-    console.error("fann ekki start button");
-  }
-}
+      }
 
 /**
  * Klárar leik, uppfærir tölfræði og sýnir niðurstöður.
  * @returns {void}
  */
 function finish() {
-    showScreen(`results`);
+  const results = createResults(state.questions, state.answers);
+  state.stats = updateStats(state.stats, results);
+
+  renderResults(results, countCorrect(results));
+  showScreen("results");
 }
 
 /**
  * Vistar svar við núverandi spurningu og sýnir næstu, eða niðurstöður ef
  * öllum spurningum hefur verið svarað.
+ * @param answer {string}
  * @returns {void}
  */
 function submitAnswer(answer) {
-  /* TODO skrá stöðu svars, klára ef seinasta spurning, annars sýna næstu */
-    console.log(
-      "Svar notanda er", 
-      answer, 
-      "rétt svar er", 
-      state.questions[state.current - 1].answer,
-    );
-    const correctAnswer = isCorrect(answer, state.questions[state.current - 1].answer)
+  const correctAnswer = isCorrect(
+    answer,
+    state.questions[state.current].answer,
+  );
 
-    if (correctAnswer){
-      alert('Rétt!')
-    }else{
-      alert('Ekki rétt')
-    }
-    //finish();
+  if (correctAnswer){
+    alert("Rétt!");
+  } else {
+    alert("Ekki rétt");
   }
+
+  state.answers.push(answer); 
+
+  const nextQuestionNum = state.current + 1;
+
+  if(nextQuestionNum >= NUMBER_OF_QUESTIONS){
+    finish();
+  }else{
+    state.current = nextQuestionNum;
+    renderQuestion(
+      state.questions[state.current],
+      state.current + 1,
+      NUMBER_OF_QUESTIONS,
+    );
+  }
+}
 
 /**
  * Fer aftur á upphafsskjá með uppfærðri tölfræði.
  * @returns {void}
  */
 function restart() {
-  /* TODO sýna upphafsskjá og stöðu */
+ renderStats(state.stats);
+ showScreen("start");
 }
 
-function initialize(a) {
-  /* TODO finna öll element, tengja form, sýna upphafsstöðu og upphafsskjá */
+function initialize() {
+  const startButton = document.querySelector(".start-button");
 
-  start();
+  if(startButton){
+    startButton.addEventListener("click", start);
+  } else {
+    console.error("fann ekki start button");
+  }
+  
+  const form = document.querySelector("form");
 
-  const form = document.querySelector("form.answer-form");
+  if(!form){
+    console.error("form not found");
+    return;
+  }
+
   form.addEventListener("submit", (e) => {
-     e.preventDefault(e, text);
-    console.log("form submitted");
+     e.preventDefault();
 
     const data = new FormData(form);
     const answer = data.get("answer");
 
+    if(typeof answer !== "string"){
+      console.warn("answer is not a string")
+      return;
+    }
+
     submitAnswer(answer);
+    const input = form.querySelector("input");
+    form.reset();
+
+    if (input){
+    input.focus();
+    }
   });
 
-  const restartButton = document.querySelector(`button.restart-button`)
+  const restartButton = document.querySelector("button.restart-button");
   
   if(restartButton) {
-    restartButton.addEventListener('click', () => {
-        showScreen('start')
-    })
+    restartButton.addEventListener("click", restart);
   }
+
+  renderStats(state.stats);
+  showScreen("start");
 }
 
-initialize("test");
+initialize();
